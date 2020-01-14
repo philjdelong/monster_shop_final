@@ -1,0 +1,6 @@
+<h1><%= @coupon.name %></h1>
+<p>Code: <%= @coupon.code %></p>
+<p>Percentage: <%= @coupon.percentage %>%</p>
+  <br>
+
+<p><%= link_to 'Edit Coupon', "/merchant/coupons/#{@coupon.id}/edit" %></p>

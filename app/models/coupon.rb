@@ -4,5 +4,5 @@ class Coupon < ApplicationRecord
 
   validates_presence_of :percentage
 
-  belongs_to :merchant, optional: true
+  belongs_to :merchant
 end

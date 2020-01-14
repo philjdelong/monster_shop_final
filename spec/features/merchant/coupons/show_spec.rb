@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "As a merchant user" do
-  describe "when i visit the coupon index page", type: :feature do
+  describe "when i visit a coupon show page", type: :feature do
     before :each do
       @merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
@@ -46,32 +46,28 @@ RSpec.describe "As a merchant user" do
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
 
-      visit '/merchant/coupons'
+      visit "/merchant/coupons/#{@half_off_mm.id}"
     end
 
-    it "i see all coupons and info for that merchant" do
+    it "i see the coupon info" do
       expect(page).to have_content('Half off Megans')
-      expect(page).to_not have_content('Half off Brians')
-      expect(page).to have_content('Fourth off Megans')
+      expect(page).to have_content('Code: 1')
+      expect(page).to have_content('50%')
     end
 
-    it "i can click on a coupon code to view that coupons show page" do
-      click_on "#{@half_off_mm.code}"
+    it "i can click a link to edit the coupon" do
+      click_link 'Edit Coupon'
+      expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}/edit")
+
+      fill_in 'Name', with: 'Fifth off Megans'
+      fill_in 'Code', with: '04301'
+      fill_in 'Percentage', with: '20'
+
+      click_on 'Update Coupon'
       expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}")
-    end
 
-    it "i can create a new coupon" do
-      click_link 'New Coupon'
-      expect(current_path).to eq("/merchant/coupons/new")
-
-      fill_in 'Name', with: 'Third off Megans'
-      fill_in 'Code', with: '00005'
-      fill_in 'Percentage', with: '33'
-
-      click_on 'Create Coupon'
-      expect(current_path).to eq('/merchant/coupons')
-
-      expect(page).to have_content('Third off Megans')
+      expect(page).to have_content('Fifth off Megans')
+      expect(page).to_not have_content('Half off Megans')
     end
   end
 end

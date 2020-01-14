@@ -3,7 +3,7 @@
 
 <% @merchant.coupons.each do |coupon| %>
   <h3><%= coupon.name %></h3>
-  <p>Code: <%= coupon.code %></p>
+  <p>Code: <%= link_to "#{coupon.code}", "/merchant/coupons/#{coupon.id}" %></p>
   <p>Percent Off: <%= coupon.percentage %>%</p>
 <% end %>
   <br>
