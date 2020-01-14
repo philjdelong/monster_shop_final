@@ -43,6 +43,7 @@ RSpec.describe "As a merchant user" do
 
       @merchant_1.coupons << [@half_off_mm, @fourth_off_mm]
       @merchant_2.coupons << [@half_off_bb, @fourth_off_bb]
+      @half_off_bb.orders << @order_1
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@m_user)
 
@@ -68,6 +69,37 @@ RSpec.describe "As a merchant user" do
 
       expect(page).to have_content('Fifth off Megans')
       expect(page).to_not have_content('Half off Megans')
+    end
+
+    it "i cannot update coupon without valid info" do
+      click_link 'Edit Coupon'
+      expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}/edit")
+
+      fill_in 'Name', with: 'Fifth off Megans'
+      fill_in 'Percentage', with: '20'
+
+      click_on 'Update Coupon'
+      expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}/edit")
+
+      expect(page).to have_content('Please enter valid coupon info.')
+    end
+
+    it "i can click a link to delete the coupon" do
+      click_on 'Delete Coupon'
+      expect(current_path).to eq("/merchant/coupons")
+
+      expect(page).to have_content("Coupon successfully deleted.")
+      expect(@merchant_1.coupons.count).to eq(1)
+    end
+
+    it "i cannot delete the coupon if it has been used on an order" do
+      visit "/merchant/coupons/#{@half_off_bb.id}"
+
+      click_on 'Delete Coupon'
+      expect(current_path).to eq("/merchant/coupons/#{@half_off_bb.id}")
+
+      expect(page).to have_content("#{@half_off_bb.name} has been used, so it can not be deleted!")
+      expect(page).to have_content("Half off Brians")
     end
   end
 end
