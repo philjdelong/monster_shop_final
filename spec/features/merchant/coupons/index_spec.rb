@@ -55,6 +55,11 @@ RSpec.describe "As a merchant user" do
       expect(page).to have_content('Fourth off Megans')
     end
 
+    it "i can click on a coupon code to view that coupons show page" do
+      click_on "#{@half_off_mm.code}"
+      expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}")
+    end
+
     it "i can create a new coupon" do
       click_link 'New Coupon'
       expect(current_path).to eq("/merchant/coupons/new")
