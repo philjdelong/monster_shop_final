@@ -55,7 +55,7 @@ RSpec.describe "As a merchant user" do
       expect(page).to have_content('50%')
     end
 
-    it "i can click a button to edit the coupon" do
+    it "i can click a link to edit the coupon" do
       click_link 'Edit Coupon'
       expect(current_path).to eq("/merchant/coupons/#{@half_off_mm.id}/edit")
 
