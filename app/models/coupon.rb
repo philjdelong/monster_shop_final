@@ -4,5 +4,6 @@ class Coupon < ApplicationRecord
 
   validates_presence_of :percentage
 
+  has_many :orders
   belongs_to :merchant
 end

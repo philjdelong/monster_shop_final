@@ -73,5 +73,19 @@ RSpec.describe "As a merchant user" do
 
       expect(page).to have_content('Third off Megans')
     end
+
+    it "i cannot create a coupon with more that 100 percent off" do
+      click_link 'New Coupon'
+      expect(current_path).to eq("/merchant/coupons/new")
+
+      fill_in 'Name', with: 'Third off Megans'
+      fill_in 'Code', with: '00006'
+      fill_in 'Percentage', with: '101'
+
+      click_on 'Create Coupon'
+      expect(current_path).to eq('/merchant/coupons/new')
+
+      expect(page).to have_content('Please enter valid coupon info.')
+    end
   end
 end
