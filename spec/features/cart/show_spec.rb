@@ -6,9 +6,27 @@ RSpec.describe 'Cart Show Page' do
     before :each do
       @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
+
+      @m_user = @megan.users.create(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
+      @d_user = User.create(name: 'Phil', address: 'Address', city: 'Denver', state: 'CO', zip: 80218, email: 'philjdelong@gmail.com', password: 'password')
+
       @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
       @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
       @hippo = @brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
+
+      @half_off_mm = Coupon.create(
+        name:       "Half off Megans",
+        code:       1,
+        percentage: 50
+      )
+
+      @fourth_off_mm = Coupon.create(
+        name:       "Fourth off Megans",
+        code:       2,
+        percentage: 25
+      )
+
+      @megan.coupons << [@half_off_mm, @fourth_off_mm]
     end
 
     describe 'I can see my cart' do
@@ -166,6 +184,26 @@ RSpec.describe 'Cart Show Page' do
         expect(current_path).to eq('/cart')
         expect(page).to_not have_content("#{@hippo.name}")
         expect(page).to have_content("Cart: 0")
+      end
+
+      it "i can add a coupon to my cart" do
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@d_user)
+
+        visit item_path(@ogre)
+        click_button 'Add to Cart'
+        visit item_path(@hippo)
+        click_button 'Add to Cart'
+        visit item_path(@hippo)
+        click_button 'Add to Cart'
+
+        visit '/cart'
+        expect(page).to have_content("$120")
+
+        fill_in 'Coupon code', with: '2'
+        click_on 'Enter Coupon'
+
+        expect(page).to have_content("#{@fourth_off_mm.name} has been applied!")
+        expect(page).to have_content("Subtotal with Coupon: $15")
       end
     end
   end
