@@ -205,6 +205,25 @@ RSpec.describe 'Cart Show Page' do
         expect(page).to have_content("#{@fourth_off_mm.name} has been applied!")
         expect(page).to have_content("Subtotal with Coupon: $15")
       end
+
+      it "i get a flash-error message when i add an invalid coupon" do
+        allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@d_user)
+
+        visit item_path(@ogre)
+        click_button 'Add to Cart'
+        visit item_path(@hippo)
+        click_button 'Add to Cart'
+        visit item_path(@hippo)
+        click_button 'Add to Cart'
+
+        visit '/cart'
+        expect(page).to have_content("$120")
+
+        fill_in 'Coupon code', with: '200'
+        click_on 'Enter Coupon'
+
+        expect(page).to have_content("Please enter valid coupon.")
+      end
     end
   end
 end

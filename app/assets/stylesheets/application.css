@@ -14,14 +14,66 @@
  *= require_self
  */
 
- nav a:hover {
-   background-color: white;
-   color: #002244;
+ header {
+   text-align: left;
+   font-family: monospace;
+   font-size: 18px;
+   background-color: tan;
+   width: 97%;
+   padding: 20px;
+ }
+
+ nav {
+   font-weight: bolder;
+ }
+
+ section {
+   text-align: center;
+   margin-left: 25%;
+   margin-right: 25%;
+   width: 50%;
+ }
+
+ body {
+   background-color: lightblue;
+   text-align: center;
  }
 
  h1 {
-   font-family: 'Princess Sofia', cursive;
+   text-align: left;
+   font-size: 60px;
+   color: #000045;
+   font-family: monospace;
+ }
+
+ h2 {
    text-align: center;
-   font-size: 2em;
-   color: #002244;
+   font-size: 40px;
+   color: #123456;
+   font-family: monospace;
+ }
+
+ h3 {
+   text-align: center;
+   font-size: 30px;
+   color: #123456;
+   font-family: monospace;
+   font-weight: bolder;
+ }
+
+ p  {
+   text-align: center;
+   font-size: 28px;
+   font-family: monospace;
+ }
+
+ a {
+   color: #123456;
+ }
+
+ img {
+   width: 50%;
+   border-color: blue;
+   border-width: thick;
+   border-radius: 10px;
  }

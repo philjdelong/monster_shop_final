@@ -10,7 +10,16 @@ RSpec.describe 'Create Order' do
       @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
       @hippo = @brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
       @user = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
+      @half_off_mm = Coupon.create(
+        name:       "Half off Megans",
+        code:       1,
+        percentage: 50
+      )
+      @megan.coupons << @half_off_mm
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      allow_any_instance_of(ApplicationController).to receive(:current_coupon).and_return(@half_off_mm)
+
     end
 
     it 'I can click a link to get to create an order' do
@@ -34,6 +43,28 @@ RSpec.describe 'Create Order' do
       within "#order-#{order.id}" do
         expect(page).to have_link(order.id)
       end
+    end
+
+    it "i can add a coupon to an order" do
+      visit item_path(@ogre)
+      click_button 'Add to Cart'
+      visit item_path(@hippo)
+      click_button 'Add to Cart'
+      visit item_path(@hippo)
+      click_button 'Add to Cart'
+
+      visit '/cart'
+
+      fill_in 'Coupon code', with: 1
+      click_on 'Enter Coupon'
+
+      click_button 'Check Out'
+
+      order = Order.last
+
+      visit "/profile/orders/#{order.id}"
+
+      expect(page).to have_content(@half_off_mm.name)
     end
   end
 
