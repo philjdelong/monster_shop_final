@@ -30,6 +30,7 @@ class CartController < ApplicationController
   end
 
   def show
+    # cart manipulation with coupon? current_coupon?
   end
 
   def empty

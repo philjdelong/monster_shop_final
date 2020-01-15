@@ -186,7 +186,7 @@ RSpec.describe 'Cart Show Page' do
         expect(page).to have_content("Cart: 0")
       end
 
-      it "i can add a coupon to my cart" do
+      it "i can add a coupon to my cart and see new subtotals" do
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@d_user)
 
         visit item_path(@ogre)
