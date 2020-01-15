@@ -4,10 +4,15 @@ class ApplicationController < ActionController::Base
   helper_method :cart,
                 :current_user,
                 :current_merchant_user?,
-                :current_admin?
+                :current_admin?,
+                :current_coupon
 
   def cart
     @cart ||= Cart.new(session[:cart])
+  end
+
+  def current_coupon
+    @current_coupon ||= Coupon.find(session[:current_coupon]['id']) if session[:current_coupon]
   end
 
   def current_user
