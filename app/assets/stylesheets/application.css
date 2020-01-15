@@ -13,3 +13,15 @@
  *= require_tree .
  *= require_self
  */
+
+ nav a:hover {
+   background-color: white;
+   color: #002244;
+ }
+
+ h1 {
+   font-family: 'Princess Sofia', cursive;
+   text-align: center;
+   font-size: 2em;
+   color: #002244;
+ }

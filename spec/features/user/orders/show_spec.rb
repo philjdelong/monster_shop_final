@@ -16,7 +16,15 @@ RSpec.describe 'Order Show Page' do
       @order_item_1 = @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: true)
       @order_item_2 = @order_2.order_items.create!(item: @giant, price: @hippo.price, quantity: 2, fulfilled: true)
       @order_item_3 = @order_2.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
+
+      @half_off_mm = Coupon.create(
+        name:       "Half off Megans",
+        code:       1,
+        percentage: 50
+      )
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      allow_any_instance_of(ApplicationController).to receive(:current_coupon).and_return(@half_off_mm)
     end
 
     it 'I can link from my orders to an order show page' do
@@ -81,6 +89,11 @@ RSpec.describe 'Order Show Page' do
       expect(@order_item_3.fulfilled).to eq(false)
       expect(@giant.inventory).to eq(5)
       expect(@ogre.inventory).to eq(7)
+    end
+
+    xit "i see coupon info if coupon was used" do
+      visit "/profile/orders/#{@order_1.id}"
+      expect(page).to have_content('Coupon used: Half off Megs')
     end
   end
 end
