@@ -1,6 +1,6 @@
 class CartController < ApplicationController
   before_action :exclude_admin
-  
+
   def add_item
     item = Item.find(params[:item_id])
     session[:cart] ||= {}
@@ -12,6 +12,13 @@ class CartController < ApplicationController
       flash[:notice] = "#{item.name} has been added to your cart!"
     end
     redirect_to items_path
+  end
+
+  def apply_coupon
+    coupon = Coupon.where(code: params[:coupon_code])[0]
+    session[:current_coupon] = coupon
+    flash[:success] = "#{coupon.name} has been applied!"
+    redirect_to '/cart'
   end
 
   def show
