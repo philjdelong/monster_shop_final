@@ -20,6 +20,8 @@ class CartController < ApplicationController
     coupon = Coupon.where(code: params[:coupon_code])[0]
     if coupon
       session[:current_coupon] = coupon
+      cart.coupon << coupon
+      cart.coupon = cart.coupon.first
       flash[:success] = "#{coupon.name} has been applied!"
     else
       flash[:error] = "Please enter valid coupon."

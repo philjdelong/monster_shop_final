@@ -23,6 +23,9 @@ RSpec.describe 'Order Show Page' do
         percentage: 50
       )
 
+      @megan.coupons << @half_off_mm
+      @half_off_mm.orders << @order_1
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
       allow_any_instance_of(ApplicationController).to receive(:current_coupon).and_return(@half_off_mm)
     end
@@ -91,9 +94,10 @@ RSpec.describe 'Order Show Page' do
       expect(@ogre.inventory).to eq(7)
     end
 
-    xit "i see coupon info if coupon was used" do
+    it "i see coupon info if coupon was used" do
       visit "/profile/orders/#{@order_1.id}"
-      expect(page).to have_content('Coupon used: Half off Megs')
+  
+      expect(page).to have_content('Coupon used: Half off Megans')
     end
   end
 end

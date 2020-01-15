@@ -15,6 +15,14 @@ RSpec.describe 'User Order Show Page' do
       @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2)
       @order_2.order_items.create!(item: @giant, price: @hippo.price, quantity: 2)
       @order_2.order_items.create!(item: @ogre, price: @hippo.price, quantity: 2)
+      @half_off_mm = Coupon.create(
+        name:       "Half off Megans",
+        code:       1,
+        percentage: 50
+      )
+      @megan.coupons << @half_off_mm
+      @half_off_mm.orders << @order_1
+      
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
     end
 
@@ -34,6 +42,7 @@ RSpec.describe 'User Order Show Page' do
         expect(page).to have_content("Created On: #{@order_1.created_at}")
         expect(page).to have_content("Updated On: #{@order_1.updated_at}")
         expect(page).to have_content("Status: #{@order_1.status}")
+        expect(page).to have_content("Coupon used: #{@half_off_mm.name}")
         expect(page).to have_content("#{@order_1.count_of_items} items")
         expect(page).to have_content("Total: #{number_to_currency(@order_1.grand_total)}")
       end
@@ -43,6 +52,7 @@ RSpec.describe 'User Order Show Page' do
         expect(page).to have_content("Created On: #{@order_2.created_at}")
         expect(page).to have_content("Updated On: #{@order_2.updated_at}")
         expect(page).to have_content("Status: #{@order_2.status}")
+        expect(page).to have_content("No coupon used")
         expect(page).to have_content("#{@order_2.count_of_items} items")
         expect(page).to have_content("Total: #{number_to_currency(@order_2.grand_total)}")
       end

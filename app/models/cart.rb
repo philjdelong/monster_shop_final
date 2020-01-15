@@ -1,9 +1,11 @@
 class Cart
   attr_reader :contents
+  attr_accessor :coupon
 
   def initialize(contents)
     @contents = contents || {}
     @contents.default = 0
+    @coupon = []
   end
 
   def add_item(item_id)
