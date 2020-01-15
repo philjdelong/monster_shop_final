@@ -3382,6 +3382,10 @@
         null,
         1,
         1,
+        null,
+        null,
+        null,
+        null,
         null
       ],
       "/Users/phildelong/turing/mod2/projects/monster_shop_final/app/models/application_record.rb": [
@@ -4074,6 +4078,7 @@
         1,
         null,
         null,
+        null,
         1,
         1,
         1,
@@ -4327,6 +4332,7 @@
         6,
         6,
         6,
+        6,
         null,
         null,
         1,
@@ -4422,6 +4428,6 @@
         null
       ]
     },
-    "timestamp": 1579099662
+    "timestamp": 1579110751
   }
 }

@@ -6,4 +6,8 @@ class Coupon < ApplicationRecord
 
   belongs_to :merchant
   has_many :orders
+
+  # def discount
+  #   (100-self.percentage)/100
+  # end
 end
