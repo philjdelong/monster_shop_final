@@ -15,9 +15,15 @@ class CartController < ApplicationController
   end
 
   def apply_coupon
+    session.delete(:current_coupon)
+    coupon_code = params[:coupon_code]
     coupon = Coupon.where(code: params[:coupon_code])[0]
-    session[:current_coupon] = coupon
-    flash[:success] = "#{coupon.name} has been applied!"
+    if coupon
+      session[:current_coupon] = coupon
+      flash[:success] = "#{coupon.name} has been applied!"
+    else
+      flash[:error] = "Please enter valid coupon."
+    end
     redirect_to '/cart'
   end
 
