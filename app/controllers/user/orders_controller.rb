@@ -11,9 +11,6 @@ class User::OrdersController < ApplicationController
 
   def create
     order = current_user.orders.new
-    if current_coupon
-      order.coupon = current_coupon
-    end
     order.save
       cart.items.each do |item|
         order.order_items.create({
@@ -22,6 +19,7 @@ class User::OrdersController < ApplicationController
           price: item.price
           })
       end
+    session.delete(:current_coupon)
     session.delete(:cart)
     flash[:notice] = "Order created successfully!"
     redirect_to '/profile/orders'
