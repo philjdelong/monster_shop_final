@@ -11,22 +11,19 @@ RSpec.describe "Add Items to Cart" do
     end
 
     it "I can add an item from the items show page" do
-      visit item_path(@ogre)
-
+      visit "/items/#{@ogre.id}"
       click_button 'Add to Cart'
 
-      expect(current_path).to eq(items_path)
+      expect(current_path).to eq("/items")
       expect(page).to have_content("#{@ogre.name} has been added to your cart!")
       expect(page).to have_content("Cart: 1")
     end
 
     it "I can add multiple items from the items show page" do
-      visit item_path(@ogre)
-
+      visit "/items/#{@ogre.id}"
       click_button 'Add to Cart'
 
-      visit item_path(@giant)
-
+      visit "/items/#{@giant.id}"
       click_button 'Add to Cart'
 
       expect(page).to have_content("#{@giant.name} has been added to your cart!")
